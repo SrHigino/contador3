@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Contador Regressivo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Lato', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; background: transparent;
+  }
+  .countdown { display: flex; gap: 10px; }
+  .countdown-item {
+    background: #111; padding: 4px 14px 8px 14px;
+    border-radius: 6px; text-align: center; color: #B289FF;
+  }
+  .countdown-item span {
+    display: block; font-size: 2rem; font-weight: 900;
+  }
+  .countdown-item small {
+    font-size: 0.8rem; font-weight: 600; margin-top: 0; display: block;
+  }
+  .end-message {
+    color: #B289FF; font-size: 1.5rem; font-weight: bold; display: none;
+  }
+</style>
+</head>
+<body>
+<div class="countdown" id="countdown">
+  <div class="countdown-item"><span id="days">00</span><small>DIAS</small></div>
+  <div class="countdown-item"><span id="hours">00</span><small>HORAS</small></div>
+  <div class="countdown-item"><span id="minutes">00</span><small>MIN</small></div>
+  <div class="countdown-item"><span id="seconds">00</span><small>SEG</small></div>
+</div>
+<div class="end-message" id="endMessage">Oferta encerrada</div>
+<script>
+  var targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 7);
+  targetDate.setHours(23, 59, 59, 0);
+  var timer = setInterval(function() {
+    var now = new Date().getTime();
+    var diff = targetDate - now;
+    if (diff <= 0) {
+      clearInterval(timer);
+      document.getElementById("countdown").style.display = "none";
+      document.getElementById("endMessage").style.display = "block";
+      return;
+    }
+    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    document.getElementById("days").textContent = String(days).padStart(2, '0');
+    document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+    document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+    document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+  }, 1000);
+</script>
+</body>
+</html>
