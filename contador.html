@@ -35,27 +35,38 @@
 </div>
 <div class="end-message" id="endMessage">Oferta encerrada</div>
 <script>
-  var targetDate = new Date();
-  targetDate.setDate(targetDate.getDate() + 7);
-  targetDate.setHours(23, 59, 59, 0);
-  var timer = setInterval(function() {
-    var now = new Date().getTime();
-    var diff = targetDate - now;
-    if (diff <= 0) {
-      clearInterval(timer);
-      document.getElementById("countdown").style.display = "none";
-      document.getElementById("endMessage").style.display = "block";
-      return;
+    // Define prazo de 7 dias a partir do acesso
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + 7);
+    deadline.setHours(23, 59, 59, 0);
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const timeRemaining = deadline.getTime() - now;
+
+        if (timeRemaining >= 0) {
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            // Atualiza no HTML
+            document.getElementById("days").textContent = String(days).padStart(2, '0');
+            document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+            document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+        } else {
+            // Quando zerar
+            document.getElementById("days").textContent = "00";
+            document.getElementById("hours").textContent = "00";
+            document.getElementById("minutes").textContent = "00";
+            document.getElementById("seconds").textContent = "00";
+        }
     }
-    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    document.getElementById("days").textContent = String(days).padStart(2, '0');
-    document.getElementById("hours").textContent = String(hours).padStart(2, '0');
-    document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
-    document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
-  }, 1000);
+
+    // Roda logo que abrir a página + a cada 1s
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 </script>
 </body>
 </html>
