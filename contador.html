@@ -1,72 +1,121 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Contador Regressivo</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Lato', sans-serif;
-    display: flex; justify-content: center; align-items: center;
-    height: 100vh; background: transparent;
-  }
-  .countdown { display: flex; gap: 10px; }
-  .countdown-item {
-    background: #111; padding: 4px 14px 8px 14px;
-    border-radius: 6px; text-align: center; color: #B289FF;
-  }
-  .countdown-item span {
-    display: block; font-size: 2rem; font-weight: 900;
-  }
-  .countdown-item small {
-    font-size: 0.8rem; font-weight: 600; margin-top: 0; display: block;
-  }
-  .end-message {
-    color: #B289FF; font-size: 1.5rem; font-weight: bold; display: none;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador Regressivo</title>
+    <style>
+        /* Reset básico de CSS */
+        * {
+            margin: 0; /* Remove margens padrão */
+            padding: 0; /* Remove espaçamentos padrão */
+            box-sizing: border-box; /* Inclui bordas e paddings no tamanho total */
+        }
+
+        html, body {
+            height: 100%; /* Garante que o corpo ocupe toda a altura da página */
+            font-family: 'Lato', sans-serif; /* Define a fonte geral */
+        }
+
+        body {
+            display: flex; /* Utilizado para centralização */
+            justify-content: center; /* Alinha horizontalmente ao centro */
+            align-items: center; /* Alinha verticalmente ao centro */
+            background: transparent; /* Fundo transparente */
+            flex-direction: column; /* Permite que a mensagem apareça embaixo */
+        }
+
+        .countdown {
+            display: flex; /* Alinha os blocos de tempo em linha */
+            gap: 10px; /* Espaçamento de 10px entre os retângulos */
+        }
+
+        .countdown-item {
+            background-color: #111; /* Fundo do retângulo */
+            padding: 4px 14px 8px 14px; /* Espaçamento interno do retângulo */
+            border-radius: 8px; /* Cantos levemente arredondados */
+            text-align: center; /* Centraliza o texto dentro do retângulo */
+            color: #B289FF; /* Cor do texto */
+        }
+
+        .time-number {
+            font-family: 'Lato Black', sans-serif; /* Fonte em destaque para números */
+            font-size: 2rem; /* Tamanho da fonte dos números */
+            font-weight: bold; /* Deixa o número mais destacado */
+        }
+
+        .time-label {
+            font-size: 0.8rem; /* Tamanho da fonte da descrição */
+            font-weight: 600; /* Peso da fonte da descrição */
+            margin-top: 0; /* Remove espaçamento extra acima */
+        }
+
+        .expired-message {
+            margin-top: 20px;
+            color: #B289FF;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<div class="countdown" id="countdown">
-  <div class="countdown-item"><span id="days">00</span><small>DIAS</small></div>
-  <div class="countdown-item"><span id="hours">00</span><small>HORAS</small></div>
-  <div class="countdown-item"><span id="minutes">00</span><small>MIN</small></div>
-  <div class="countdown-item"><span id="seconds">00</span><small>SEG</small></div>
-</div>
-<div class="end-message" id="endMessage">Oferta encerrada</div>
-<script>
-    // Define prazo de 7 dias a partir do acesso
-    const deadline = new Date();
-    deadline.setDate(deadline.getDate() + 7);
-    deadline.setHours(23, 59, 59, 0);
+    <div class="countdown">
+        <!-- Estrutura de cada grupo do contador -->
+        <div class="countdown-item">
+            <div class="time-number" id="days">00</div>
+            <div class="time-label">DIAS</div>
+        </div>
+        <div class="countdown-item">
+            <div class="time-number" id="hours">00</div>
+            <div class="time-label">HORAS</div>
+        </div>
+        <div class="countdown-item">
+            <div class="time-number" id="minutes">00</div>
+            <div class="time-label">MIN</div>
+        </div>
+        <div class="countdown-item">
+            <div class="time-number" id="seconds">00</div>
+            <div class="time-label">SEG</div>
+        </div>
+    </div>
 
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const timeRemaining = deadline.getTime() - now;
+    <div id="expired" class="expired-message" style="display:none;">
+        Oferta Encerrada
+    </div>
 
-        if (timeRemaining >= 0) {
-            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+    <script>
+        // Define prazo de 7 dias a partir do acesso
+        const deadline = new Date();
+        deadline.setDate(deadline.getDate() + 7);
+        deadline.setHours(23, 59, 59, 0);
 
-            // Atualiza no HTML
-            document.getElementById("days").textContent = String(days).padStart(2, '0');
-            document.getElementById("hours").textContent = String(hours).padStart(2, '0');
-            document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
-            document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
-        } else {
-            // Quando zerar
-            document.getElementById("days").textContent = "00";
-            document.getElementById("hours").textContent = "00";
-            document.getElementById("minutes").textContent = "00";
-            document.getElementById("seconds").textContent = "00";
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeRemaining = deadline.getTime() - now;
+
+            if (timeRemaining >= 0) {
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                // Atualiza no HTML
+                document.getElementById("days").textContent = String(days).padStart(2, '0');
+                document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+                document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+                document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+            } else {
+                // Quando zerar, esconde o contador e mostra mensagem
+                document.querySelector(".countdown").style.display = "none";
+                document.getElementById("expired").style.display = "block";
+                clearInterval(timer);
+            }
         }
-    }
 
-    // Roda logo que abrir a página + a cada 1s
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-</script>
+        // Executa imediatamente + a cada 1 segundo
+        updateCountdown();
+        let timer = setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
